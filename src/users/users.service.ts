@@ -15,9 +15,13 @@ import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
  * Schema
  */
 import * as schema from '../db/schema.js';
+import { User } from '../db/schema.js';
+
+/**
+ * DTOs
+ */
 import { SignUpDto } from './dtos/sign-up.dto.js';
 import { SignInDto } from './dtos/sign-in.dto.js';
-import { Post, User } from '../db/schema.js';
 import { UserResponseDto } from './dtos/user-response.dto.js';
 
 @Injectable()
