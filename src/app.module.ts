@@ -13,6 +13,7 @@ import { AppService } from './app.service.js';
 import { DbModule } from './db/db.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
+import { PostsModule } from './posts/posts.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -28,6 +29,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     DbModule,
     AuthModule,
     UsersModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
