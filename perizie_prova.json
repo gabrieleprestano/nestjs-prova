@@ -1,0 +1,172 @@
+{
+  "data_prova": "11/09/2026",
+  "filtri": {
+    "senza_sconto": "&nosc=1",
+    "noval": "&noval=1",
+    "solo_danni_selezionati": "&onlyselected=1"
+  },
+  "perizie_passate": 12,
+  "perizie_bocciate": 3,
+  "perizie_totali": 15,
+  "perizie": [
+    {
+      "perizia": 1,
+      "id": 242677,
+      "targa": "GG314JC",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=242677&hash=&lang=it&nosc=0&images&fout=242677-GG314JC-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 2,
+      "id": 243069,
+      "targa": "GP385FK",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=243069&hash=&lang=it&nosc=0&images&fout=243069-GP385FK-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 3,
+      "id": 234269,
+      "targa": "GL960JB",
+      "tipo": "Stato d'uso",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=234269&hash=&lang=it&nosc=0&images&fout=234269-GL960JB-perizia.pdf&v=2",
+      "incongruenzeVersione1": true,
+      "fotoBenVisibili": true,
+      "incongruenze": [
+        "Nella versione 1 il nome dell'auto DS DS7 CROSSBACK è presente, mentre nella versione 2 non lo è.",
+        "Nella versione 1 i danni sono visibili, mentre non sono disponibili nella versione 2."
+      ]
+    },
+
+    {
+      "perizia": 4,
+      "id": 238809,
+      "targa": "FK755XY",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238809&hash=&lang=it&nosc=0&images&fout=238809-FK755XY-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 5,
+      "id": 236205,
+      "targa": "GK191NF",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=236205&hash=&lang=it&nosc=0&fout=236205-GK191NF-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 6,
+      "id": 238809,
+      "targa": "FK755XY",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238809&hash=&lang=it&nosc=0&images&fout=238809-FK755XY-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 7,
+      "id": 242345,
+      "targa": "GC541YP",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=242345&hash=&lang=it&nosc=0&fout=242345-GC541YP-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 8,
+      "id": 238491,
+      "targa": "GK766ZH",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238491&hash=&lang=it&nosc=0&fout=238491-GK766ZH-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 9,
+      "id": 238911,
+      "targa": "FW477EK",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238911&hash=&lang=it&nosc=0&images&fout=238911-FW477EK-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": true,
+      "fotoBenVisibili": true,
+      "incongruenze": [
+        "Nella versione 1 la data di primo rilievo (28/08/2026) è presente, mentre nella versione 2 non lo è. (0/00/0000)"
+      ]
+    },
+
+    {
+      "perizia": 10,
+      "id": 238931,
+      "targa": "GH699RC",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238931&hash=&lang=it&nosc=0&images&fout=238931-GH699RC-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 11,
+      "id": 241271,
+      "targa": "FN999VL",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=241271&hash=&lang=it&nosc=0&images&fout=241271-FN999VL-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 12,
+      "id": 241589,
+      "targa": "GF127SC",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=241589&hash=&lang=it&nosc=0&images&fout=241589-GF127SC-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 13,
+      "id": 238707,
+      "targa": "FZ990HJ",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=238707&hash=&lang=it&nosc=0&images&fout=238707-FZ990HJ-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    },
+
+    {
+      "perizia": 14,
+      "id": 241381,
+      "targa": "GR324XB",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=241381&hash=&lang=it&nosc=0&images&fout=241381-GR324XB-perizia.pdf&onlyselected=0&v=2",
+      "incongruenzeVersione1": true,
+      "fotoBenVisibili": true,
+      "incongruenze": [
+        "Nella versione 1, i danni sono visibili sia con onlyselected=1 che con onlyselected=0, mentre nella versione 2 sono disponibili sono solo con onlyselected=0."
+      ]
+    },
+
+    {
+      "perizia": 15,
+      "id": 239425,
+      "targa": "GP240SZ",
+      "tipo": "UR",
+      "urlPdfVersione2": "https://xpert.ggroup.cloud/api/api.php?cmd=print_adz_perizie&header=gg&id=239425&hash=&lang=it&nosc=0&images&fout=239425-GP240SZ-perizia.pdf&onlyselected=1&v=2",
+      "incongruenzeVersione1": false,
+      "fotoBenVisibili": true
+    }
+  ]
+}
