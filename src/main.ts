@@ -41,7 +41,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: '1', // Imposta 'v1' come versione di default per tutti i controller
+    defaultVersion: '1', // Setting 'v1' as the default version for all controllers
   });
 
   await app.listen(PORT);
