@@ -27,14 +27,31 @@ import { AdminGuard } from '../guards/admin.guard.js';
 export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
+  @Get('/all')
+  findAll() {
+    return this.postsService.findAll();
+  }
+
+  @Get('/:id')
+  findOne(@Param('id') id: string) {
+    return this.postsService.findOne(id);
+  }
+
   @UseGuards(AuthGuard, AdminGuard)
   @Post('/add')
   create(@Body() createPostDto: CreatePostDto, @Request() req: ExpressRequest & { user: JwtPayload }) {
     return this.postsService.create(createPostDto, req.user.sub);
   }
 
-  @Get('/all')
-  findAll() {
-    return this.postsService.findAll();
+  @UseGuards(AuthGuard, AdminGuard)
+  @Patch('/update/:id')
+  update(@Param('id') id: string, @Body() updatePostDto: Partial<CreatePostDto>) {
+    return this.postsService.update(id, updatePostDto);
+  }
+
+  @UseGuards(AuthGuard, AdminGuard)
+  @Delete('/delete/:id')
+  delete(@Param('id') id: string) {
+    return this.postsService.delete(id);
   }
 }
