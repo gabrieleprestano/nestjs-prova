@@ -4,6 +4,7 @@ export class PostResponseDto {
     id!: string;
     title!: string;
     content!: string;
+    slug!: string;
     authorId!: string;
 
     created_at!: Date;

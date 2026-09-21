@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+
+/**
+ * External Libraries
+ */
+import slugify from 'slugify';
 
 /**
  * Services
@@ -39,7 +44,7 @@ export class PostsService {
     return new PostResponseDto(post);
   }
 
-  async findAll() {
+  async findAll(): Promise<{ count: number; posts: PostResponseDto[] }> {
     const posts = await this.drizzle.query.posts.findMany({
       with: {
         author: {
@@ -60,7 +65,7 @@ export class PostsService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<PostResponseDto | null> {
     const post = await this.drizzle.query.posts.findFirst({
       where: eq(schema.posts.id, id),
       with: {
@@ -79,15 +84,19 @@ export class PostsService {
     return this.toPostDto(post);
   }
 
-  async create(createPostDto: CreatePostDto, authorId: string) {
-    const existingPost = await this.drizzle.select().from(schema.posts).where(eq(schema.posts.title, createPostDto.title));
+  async create(createPostDto: CreatePostDto, authorId: string): Promise<{ message: string; post: PostResponseDto }> {
+    const postDtoSlug = slugify(createPostDto.title, { lower: true, strict: true });
+    const existingPost = await this.drizzle.select().from(schema.posts).where(eq(schema.posts.slug, postDtoSlug));
 
     if (existingPost.length > 0) throw new ConflictException('Post with this title already exists');
+
+    const titleSlug = postDtoSlug;
 
     const [newPost] = await this.drizzle.insert(schema.posts).values({
       title: createPostDto.title,
       content: createPostDto.content,
-      author_id: authorId
+      author_id: authorId,
+      slug: titleSlug
     }).returning();
 
     const postAuthor = await this.usersService.findById(authorId);
@@ -98,7 +107,7 @@ export class PostsService {
     };
   }
 
-  async update(id: string, updatePostDto: Partial<CreatePostDto>) {
+  async update(id: string, updatePostDto: Partial<CreatePostDto>): Promise<{ message: string; post: PostResponseDto }> {
     const postToUpdate = await this.drizzle.query.posts.findFirst({
       where: eq(schema.posts.id, id),
     });
@@ -107,7 +116,9 @@ export class PostsService {
 
     const [updatedPost] = await this.drizzle.update(schema.posts).set({
       title: updatePostDto.title ?? postToUpdate.title,
-      content: updatePostDto.content ?? postToUpdate.content
+      content: updatePostDto.content ?? postToUpdate.content,
+      slug: updatePostDto.title ? slugify(updatePostDto.title, { lower: true, strict: true })
+        : postToUpdate.slug
     }).where(eq(schema.posts.id, id)).returning();
 
     return {
@@ -116,7 +127,7 @@ export class PostsService {
     };
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<{ message: string }> {
     const postToDelete = await this.drizzle.query.posts.findFirst({
       where: eq(schema.posts.id, id),
     });
