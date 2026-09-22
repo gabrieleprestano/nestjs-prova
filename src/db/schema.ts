@@ -95,11 +95,11 @@ export const usersRelations = relations(users, ({ many }) => ({
     likes: many(likes),
     comments: many(comments),
 
-    // Users who are being followed by other users
-    following: many(followers, { relationName: 'following_users' }),
+    // Users a user is following
+    following: many(followers, { relationName: 'user_following' }),
 
-    // Users who are following other users
-    followers: many(followers, { relationName: 'followed_by_users' }),
+    // Users that are following a user
+    followers: many(followers, { relationName: 'user_followers' }),
 }));
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
@@ -134,18 +134,18 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 }));
 
 export const followersRelations = relations(followers, ({ one }) => ({
-    // The user who wants to follow another user
+    // Who is following another user (follower_id)
     follower: one(users, {
         fields: [followers.follower_id],
         references: [users.id],
-        relationName: 'follower_users',
+        relationName: 'user_following',
     }),
 
-    // The user who is being followed
+    // Who is being followed (following_id)
     following: one(users, {
         fields: [followers.following_id],
         references: [users.id],
-        relationName: 'followed_by_users',
+        relationName: 'user_followers',
     }),
 }));
 
