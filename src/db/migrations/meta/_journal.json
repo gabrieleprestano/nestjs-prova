@@ -29,6 +29,13 @@
       "when": 1790063302270,
       "tag": "0003_lying_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790068279033,
+      "tag": "0004_clumsy_wildside",
+      "breakpoints": true
     }
   ]
 }
