@@ -73,16 +73,6 @@ export const comments = pgTable('comments', {
     post_id: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
 });
 
-export const followers = pgTable('followers', {
-    id: uuid('id').defaultRandom().primaryKey(),
-    created_at: timestamp('created_at').defaultNow().notNull(),
-
-    follower_id: uuid('follower_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-    following_id: uuid('following_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-}, (table) => ([
-    uniqueIndex('follower_following_idx').on(table.follower_id, table.following_id), // It ensures a user can follow another user only once
-]));
-
 /**
  * Relations
  * @UserRelations: A user can have many posts, likes, comments, following, and followers.
@@ -94,12 +84,6 @@ export const usersRelations = relations(users, ({ many }) => ({
     posts: many(posts),
     likes: many(likes),
     comments: many(comments),
-
-    // Users a user is following
-    following: many(followers, { relationName: 'user_following' }),
-
-    // Users that are following a user
-    followers: many(followers, { relationName: 'user_followers' }),
 }));
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
@@ -133,22 +117,6 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     }),
 }));
 
-export const followersRelations = relations(followers, ({ one }) => ({
-    // Who is following another user (follower_id)
-    follower: one(users, {
-        fields: [followers.follower_id],
-        references: [users.id],
-        relationName: 'user_following',
-    }),
-
-    // Who is being followed (following_id)
-    following: one(users, {
-        fields: [followers.following_id],
-        references: [users.id],
-        relationName: 'user_followers',
-    }),
-}));
-
 /**
  * Drizzle Infer Types
  */
@@ -160,5 +128,3 @@ export type Like = InferSelectModel<typeof likes>;
 export type NewLike = InferInsertModel<typeof likes>;
 export type Comment = InferSelectModel<typeof comments>;
 export type NewComment = InferInsertModel<typeof comments>;
-export type Follower = InferSelectModel<typeof followers>;
-export type NewFollower = InferInsertModel<typeof followers>;
