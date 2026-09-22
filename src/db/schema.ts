@@ -10,6 +10,24 @@ enum UserRole {
     USER = 'user',
 }
 
+enum PostCategory {
+    GENERIC = 'generic',
+    TECHNOLOGY = 'technology',
+    LIFESTYLE = 'lifestyle',
+    HEALTH = 'health',
+    EDUCATION = 'education',
+    HISTORY = 'history',
+    ENTERTAINMENT = 'entertainment',
+    SPORTS = 'sports',
+    TRAVEL = 'travel',
+    FOOD = 'food',
+    FASHION = 'fashion',
+    BUSINESS = 'business',
+    SCIENCE = 'science',
+    ART = 'art',
+    POLITICS = 'politics',
+}
+
 /**
  * Tables
  */
@@ -28,6 +46,7 @@ export const posts = pgTable('posts', {
     title: text('title').notNull(),
     slug: text('slug').unique().notNull(),
     content: text('content').notNull(),
+    category: text('category').notNull().default(PostCategory.GENERIC),
     created_at: timestamp('created_at').defaultNow().notNull(),
     updated_at: timestamp('updated_at').defaultNow().notNull(),
 

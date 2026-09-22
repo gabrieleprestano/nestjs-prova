@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ADD COLUMN "category" text DEFAULT 'generic' NOT NULL;
