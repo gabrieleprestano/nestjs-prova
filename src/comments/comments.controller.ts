@@ -5,7 +5,11 @@ import { Controller, Post, Param, UseGuards, Request, Body, Delete } from '@nest
  */
 import type { Request as ExpressRequest } from 'express';
 import type { JwtPayload } from '../models/types/jwt-payload.type.js';
-import type { CreateCommentDto } from './dto/create-comment.dto.js';
+
+/**
+ * DTOs
+ */
+import { CreateCommentDto } from './dto/create-comment.dto.js';
 
 /**
  * Services
