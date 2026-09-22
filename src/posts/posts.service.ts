@@ -134,6 +134,7 @@ export class PostsService {
     const [newPost] = await this.drizzle.insert(schema.posts).values({
       title: createPostDto.title,
       content: createPostDto.content,
+      category: createPostDto.category,
       author_id: authorId,
       slug: titleSlug
     }).returning();
