@@ -14,7 +14,7 @@ import { DbModule } from './db/db.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { PostsModule } from './posts/posts.module.js';
-import { LikesModule } from './likes/likes.module';
+import { LikesModule } from './likes/likes.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
