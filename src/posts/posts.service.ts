@@ -46,7 +46,7 @@ export class PostsService {
   }
 
   async findAll(queryFilters: PostsFiltersDto): Promise<{ count: number; page: number; limit: number; totalPages: number; posts: PostResponseDto[] }> {
-    const { search, authorId, order, page = 1, limit = 10 } = queryFilters;
+    const { search, authorId, order, category, page = 1, limit = 10 } = queryFilters;
 
     const paginationOffset = (page - 1) * limit;
 
@@ -63,6 +63,8 @@ export class PostsService {
     }
 
     if (authorId) conditions.push(eq(schema.posts.author_id, authorId));
+
+    if (category) conditions.push(eq(schema.posts.category, category));
 
     const orderBy = order === 'asc'
       ? asc(schema.posts.created_at)
