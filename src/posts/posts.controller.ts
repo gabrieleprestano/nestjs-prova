@@ -19,7 +19,7 @@ import { PostsFiltersDto } from './dto/posts-filters.dto.js';
  * Types
  */
 import type { Request as ExpressRequest } from 'express';
-import { JwtPayload } from '../models/types/jwt-payload.type.js';
+import type { JwtPayload } from '../models/types/jwt-payload.type.js';
 
 /**
  * Guards

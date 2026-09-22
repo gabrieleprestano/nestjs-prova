@@ -1,6 +1,11 @@
 import { IsIn, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
 import { Type } from "class-transformer";
 
+/**
+ * Constants and Types
+ */
+import { POST_CATEGORIES, type PostCategory } from "../../db/schema.js";
+
 export class PostsFiltersDto {
     @IsOptional()
     @IsString()
@@ -14,6 +19,11 @@ export class PostsFiltersDto {
     @IsString()
     @IsIn(['asc', 'desc'])
     order?: 'asc' | 'desc' = 'asc'; // Default order is ascending
+
+    @IsOptional()
+    @IsString()
+    @IsIn(POST_CATEGORIES)
+    category?: PostCategory;
 
     @IsOptional()
     @Type(() => Number) // This ensures the value is transformed to a number

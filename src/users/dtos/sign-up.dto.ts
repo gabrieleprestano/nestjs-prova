@@ -1,7 +1,7 @@
 /**
  * Validators
  */
-import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength } from 'class-validator';
+import { IsEmail, MinLength, MaxLength } from 'class-validator';
 
 const PASSWORD_MIN_LENGTH = 6;
 const NAME_MIN_LENGTH = 3;

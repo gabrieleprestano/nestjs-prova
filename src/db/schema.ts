@@ -1,32 +1,33 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 
 /**
- * Enums
+ * Constants (Union Types for User Roles and Post Categories)
  */
-enum UserRole {
-    ADMIN = 'admin',
-    USER = 'user',
-}
+export const USER_ROLES = ['admin', 'user'] as const;
 
-enum PostCategory {
-    GENERIC = 'generic',
-    TECHNOLOGY = 'technology',
-    LIFESTYLE = 'lifestyle',
-    HEALTH = 'health',
-    EDUCATION = 'education',
-    HISTORY = 'history',
-    ENTERTAINMENT = 'entertainment',
-    SPORTS = 'sports',
-    TRAVEL = 'travel',
-    FOOD = 'food',
-    FASHION = 'fashion',
-    BUSINESS = 'business',
-    SCIENCE = 'science',
-    ART = 'art',
-    POLITICS = 'politics',
-}
+export const POST_CATEGORIES = [
+    'generic',
+    'technology',
+    'lifestyle',
+    'health',
+    'education',
+    'history',
+    'entertainment',
+    'sports',
+    'travel',
+    'food',
+    'fashion',
+    'business',
+    'science',
+    'art',
+    'politics',
+] as const;
+
+export type UserRole = (typeof USER_ROLES)[number];
+export type PostCategory = (typeof POST_CATEGORIES)[number];
 
 /**
  * Tables
@@ -36,7 +37,7 @@ export const users = pgTable('users', {
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
     password: text('password').notNull(),
-    role: text('role').notNull().default(UserRole.USER),
+    role: text('role').$type<UserRole>().notNull().default('user'),
     created_at: timestamp('created_at').defaultNow().notNull(),
     updated_at: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -46,7 +47,7 @@ export const posts = pgTable('posts', {
     title: text('title').notNull(),
     slug: text('slug').unique().notNull(),
     content: text('content').notNull(),
-    category: text('category').notNull().default(PostCategory.GENERIC),
+    category: text('category').$type<PostCategory>().notNull().default('generic'),
     created_at: timestamp('created_at').defaultNow().notNull(),
     updated_at: timestamp('updated_at').defaultNow().notNull(),
 
