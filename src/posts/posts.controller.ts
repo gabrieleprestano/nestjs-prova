@@ -1,4 +1,8 @@
+/**
+ * NestJS Common
+ */
 import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Query } from '@nestjs/common';
 
 /**
  * Services
@@ -9,7 +13,7 @@ import { PostsService } from './posts.service.js';
  * DTOs
  */
 import { CreatePostDto } from './dto/create-post.dto.js';
-import { UpdatePostDto } from './dto/update-post.dto.js';
+import { PostsFiltersDto } from './dto/posts-filters.dto.js';
 
 /**
  * Types
@@ -28,8 +32,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) { }
 
   @Get('/all')
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@Query() queryFilters: PostsFiltersDto) {
+    return this.postsService.findAll(queryFilters);
   }
 
   @Get('/:id')

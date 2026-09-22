@@ -18,7 +18,7 @@ import type { Post } from '../db/schema.js';
 /**
  * Database & Drizzle ORM Imports
  */
-import { eq } from 'drizzle-orm';
+import { eq, or, SQL, ilike, asc, desc, and, count } from 'drizzle-orm';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
 
 /**
@@ -26,6 +26,7 @@ import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
  */
 import { CreatePostDto } from './dto/create-post.dto.js';
 import { PostResponseDto } from './dto/post-response.dto.js';
+import { PostsFiltersDto } from './dto/posts-filters.dto.js';
 
 /**
  * Schema
@@ -44,8 +45,45 @@ export class PostsService {
     return new PostResponseDto(post);
   }
 
-  async findAll(): Promise<{ count: number; posts: PostResponseDto[] }> {
+  async findAll(queryFilters: PostsFiltersDto): Promise<{ count: number; page: number; limit: number; totalPages: number; posts: PostResponseDto[] }> {
+    const { search, authorId, order, page = 1, limit = 10 } = queryFilters;
+
+    const paginationOffset = (page - 1) * limit;
+
+    const conditions: SQL[] = [];
+
+    if (search) {
+      // Create a search condition for the title and content fields using the ilike operator for case-insensitive matching
+      const searchCondition = or(
+        ilike(schema.posts.title, `%${search}%`),
+        ilike(schema.posts.content, `%${search}%`)
+      );
+
+      if (searchCondition) conditions.push(searchCondition);
+    }
+
+    if (authorId) conditions.push(eq(schema.posts.author_id, authorId));
+
+    const orderBy = order === 'asc'
+      ? asc(schema.posts.created_at)
+      : order === 'desc'
+        ? desc(schema.posts.created_at)
+        : asc(schema.posts.created_at); // Default order by created_at ascending if no order is specified
+
+    const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+    const [{ total }] = await this.drizzle
+      .select({ total: count() })
+      .from(schema.posts)
+      .where(where);
+
+    if (total === 0) return { count: 0, page: page, limit: limit, totalPages: 0, posts: [] };
+
     const posts = await this.drizzle.query.posts.findMany({
+      where: where,
+      orderBy: orderBy,
+      limit: limit,
+      offset: paginationOffset,
       with: {
         author: {
           columns: {
@@ -57,10 +95,11 @@ export class PostsService {
       }
     });
 
-    if (posts.length === 0) return { count: 0, posts: [] };
-
     return {
-      count: posts.length,
+      count: total,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(total / limit),
       posts: posts.map(post => this.toPostDto(post))
     };
   }
