@@ -73,9 +73,19 @@ export const comments = pgTable('comments', {
     post_id: uuid('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
 });
 
+export const followers = pgTable('followers', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+
+    follower_id: uuid('follower_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    following_id: uuid('following_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+}, (table) => ([
+    uniqueIndex('follower_following_idx').on(table.follower_id, table.following_id), // It ensures a user can follow another user only once
+]));
+
 /**
  * Relations
- * @UserRelations: A user can have many posts, likes, and comments.
+ * @UserRelations: A user can have many posts, likes, comments, following, and followers.
  * @PostRelations: A post belongs to an author and can have many likes and comments.
  * @LikeRelations: A like belongs to a user and a post.
  * @CommentRelations: A comment belongs to a user and a post.
@@ -84,6 +94,12 @@ export const usersRelations = relations(users, ({ many }) => ({
     posts: many(posts),
     likes: many(likes),
     comments: many(comments),
+
+    // Users who are being followed by other users
+    following: many(followers, { relationName: 'following_users' }),
+
+    // Users who are following other users
+    followers: many(followers, { relationName: 'followed_by_users' }),
 }));
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
@@ -117,6 +133,22 @@ export const commentsRelations = relations(comments, ({ one }) => ({
     }),
 }));
 
+export const followersRelations = relations(followers, ({ one }) => ({
+    // The user who wants to follow another user
+    follower: one(users, {
+        fields: [followers.follower_id],
+        references: [users.id],
+        relationName: 'follower_users',
+    }),
+
+    // The user who is being followed
+    following: one(users, {
+        fields: [followers.following_id],
+        references: [users.id],
+        relationName: 'followed_by_users',
+    }),
+}));
+
 /**
  * Drizzle Infer Types
  */
@@ -128,3 +160,5 @@ export type Like = InferSelectModel<typeof likes>;
 export type NewLike = InferInsertModel<typeof likes>;
 export type Comment = InferSelectModel<typeof comments>;
 export type NewComment = InferInsertModel<typeof comments>;
+export type Follower = InferSelectModel<typeof followers>;
+export type NewFollower = InferInsertModel<typeof followers>;
