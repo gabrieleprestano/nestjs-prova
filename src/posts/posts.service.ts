@@ -158,7 +158,8 @@ export class PostsService {
       title: updatePostDto.title ?? postToUpdate.title,
       content: updatePostDto.content ?? postToUpdate.content,
       slug: updatePostDto.title ? slugify(updatePostDto.title, { lower: true, strict: true })
-        : postToUpdate.slug
+        : postToUpdate.slug,
+      category: updatePostDto.category ?? postToUpdate.category,
     }).where(eq(schema.posts.id, id)).returning();
 
     return {
