@@ -2,6 +2,11 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
 
 /**
+ * Drizzle ORM Conditions
+ */
+import { and, eq } from 'drizzle-orm/sql/expressions/conditions';
+
+/**
  * Services
  */
 import { UsersService } from '../users/users.service.js';
@@ -10,7 +15,6 @@ import { UsersService } from '../users/users.service.js';
  * Schema
  */
 import * as schema from '../db/schema.js';
-import { and, eq } from 'drizzle-orm/sql/expressions/conditions';
 
 @Injectable()
 export class LikesService {

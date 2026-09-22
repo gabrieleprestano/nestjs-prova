@@ -93,7 +93,19 @@ export class PostsService {
             name: true,
             email: true,
           },
-        }
+        },
+        likes: true,
+        comments: {
+          with: {
+            user: {
+              columns: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            }
+          }
+        },
       }
     });
 
@@ -116,7 +128,19 @@ export class PostsService {
             name: true,
             email: true,
           },
-        }
+        },
+        likes: true,
+        comments: {
+          with: {
+            user: {
+              columns: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            }
+          }
+        },
       }
     });
 

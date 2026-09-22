@@ -15,6 +15,7 @@ import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { PostsModule } from './posts/posts.module.js';
 import { LikesModule } from './likes/likes.module.js';
+import { CommentsModule } from './comments/comments.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -32,6 +33,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     UsersModule,
     PostsModule,
     LikesModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
