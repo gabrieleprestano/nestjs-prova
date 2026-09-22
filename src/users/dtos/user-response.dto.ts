@@ -1,5 +1,4 @@
 import { Exclude } from 'class-transformer';
-import { IsIn } from 'class-validator';
 
 /**
  * Entities
