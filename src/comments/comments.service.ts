@@ -31,28 +31,40 @@ export class CommentsService {
     ) { }
 
     async addComment(userId: string, postId: string, createCommentDto: CreateCommentDto) {
-        const existingPost = await this.drizzle.query.posts.findFirst({
-            where: eq(schema.posts.id, postId),
-        });
+        return await this.drizzle.transaction(async (tx) => {
+            const existingPost = await tx.query.posts.findFirst({
+                where: eq(schema.posts.id, postId),
+            });
 
-        if (!existingPost) throw new NotFoundException('Post was not found');
+            if (!existingPost) throw new NotFoundException('Post was not found');
 
-        const commentAuthor = await this.usersService.findById(userId);
-        const targetPostAuthor = await this.usersService.findById(existingPost.author_id);
+            const commentAuthor = await this.usersService.findById(userId);
+            const targetPostAuthor = await this.usersService.findById(existingPost.author_id);
 
-        const commentAuthorName = commentAuthor?.name ?? 'An unknown user';
-        const targetPostAuthorName = targetPostAuthor?.name ?? 'an unknown author';
+            const commentAuthorName = commentAuthor?.name ?? 'An unknown user';
+            const targetPostAuthorName = targetPostAuthor?.name ?? 'an unknown author';
 
-        const [newComment] = await this.drizzle.insert(schema.comments).values({
-            content: createCommentDto.content,
-            user_id: userId,
-            post_id: postId,
-        }).returning();
+            const [newComment] = await tx.insert(schema.comments).values({
+                content: createCommentDto.content,
+                user_id: userId,
+                post_id: postId,
+            }).returning();
 
-        return {
-            message: `${commentAuthorName} commented on ${targetPostAuthorName}'s post`,
-            comment: newComment,
-        }
+            if (existingPost.author_id !== userId) {
+                await tx.insert(schema.notifications).values({
+                    type: 'comment',
+                    user_id: existingPost.author_id,
+                    post_id: postId,
+                    author_id: userId,
+                });
+            }
+
+            return {
+                message: `${commentAuthorName} commented on ${targetPostAuthorName}'s post`,
+                notification: `A notification was sent to ${targetPostAuthorName}.`,
+                comment: newComment,
+            }
+        })
     }
 
     async deleteComment(userId: string, commentId: string) {

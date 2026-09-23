@@ -17,6 +17,7 @@ import { PostsModule } from './posts/posts.module.js';
 import { LikesModule } from './likes/likes.module.js';
 import { CommentsModule } from './comments/comments.module.js';
 import { FollowersModule } from './followers/followers.module.js';
+import { NotificationsModule } from './notifications/notifications.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -36,6 +37,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     LikesModule,
     CommentsModule,
     FollowersModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
