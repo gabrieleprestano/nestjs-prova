@@ -16,7 +16,7 @@ import { UsersModule } from './users/users.module.js';
 import { PostsModule } from './posts/posts.module.js';
 import { LikesModule } from './likes/likes.module.js';
 import { CommentsModule } from './comments/comments.module.js';
-import { FollowersModule } from './followers/followers.module';
+import { FollowersModule } from './followers/followers.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
