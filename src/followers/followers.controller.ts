@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Param } from '@nestjs/common';
 
 /**
  * Services
@@ -21,8 +21,8 @@ export class FollowersController {
   constructor(private readonly followersService: FollowersService) { }
 
   @UseGuards(AuthGuard)
-  @Post()
-  async toggleFollow(@Request() req: ExpressRequest & { user: JwtPayload }, followingId: string) {
+  @Post('/follow/:followingId')
+  async toggleFollow(@Request() req: ExpressRequest & { user: JwtPayload }, @Param('followingId') followingId: string) {
     const followerId = req.user.sub;
     return this.followersService.toggleFollow(followerId, followingId);
   }
