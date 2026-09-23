@@ -72,7 +72,34 @@ export class UsersService {
     async findById(id: string): Promise<(UserResponseDto | undefined)> {
         const user = await this.drizzle.query.users.findFirst({
             where: eq(schema.users.id, id),
-            with: { posts: true },
+            with: {
+                posts: {
+                    with: {
+                        likes: {
+                            with: {
+                                user: {
+                                    columns: {
+                                        id: true,
+                                        name: true,
+                                        email: true,
+                                    }
+                                }
+                            }
+                        },
+                        comments: {
+                            with: {
+                                user: {
+                                    columns: {
+                                        id: true,
+                                        name: true,
+                                        email: true,
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         });
 
         if (!user) return undefined;
