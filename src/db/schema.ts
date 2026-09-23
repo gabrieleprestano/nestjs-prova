@@ -4,7 +4,7 @@ import { pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core
 import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 
 /**
- * Constants (Union Types for User Roles and Post Categories)
+ * Constants (Union Types for User Roles, Post Categories, and Notification Types)
  */
 export const USER_ROLES = ['admin', 'user'] as const;
 
@@ -26,8 +26,11 @@ export const POST_CATEGORIES = [
     'politics',
 ] as const;
 
+export const NOTIFICATION_TYPES = ['like', 'comment', 'follow'] as const;
+
 export type UserRole = (typeof USER_ROLES)[number];
 export type PostCategory = (typeof POST_CATEGORIES)[number];
+export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
 /**
  * Tables
@@ -92,6 +95,24 @@ export const followers = pgTable(
     ],
 );
 
+export const notifications = pgTable('notifications', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    type: text('type').$type<NotificationType>().notNull(),
+    created_at: timestamp('created_at').defaultNow().notNull(),
+
+    // The user who receives the notification
+    user_id: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+
+    // The user who triggered the notification
+    author_id: uuid('author_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+
+    // The post related to the notification (only if the notification is about a post)
+    post_id: uuid('post_id').references(() => posts.id, { onDelete: 'cascade' }),
+}, (table) => ([
+    uniqueIndex('user_post_notification_idx').on(table.user_id, table.post_id, table.type),
+    // It ensures a user can have only one notification of the same type per post
+]));
+
 /**
  * Relations
  * @UserRelations: A user can have many posts, likes, comments, following, and followers.
@@ -103,6 +124,12 @@ export const usersRelations = relations(users, ({ many }) => ({
     posts: many(posts),
     likes: many(likes),
     comments: many(comments),
+
+    // The notifications received by the user
+    receivedNotifications: many(notifications, { relationName: 'received_notifications' }),
+
+    // The notifications sent by the user
+    sentNotifications: many(notifications, { relationName: 'sent_notifications' }),
 
     // Users a user is following
     following: many(followers, { relationName: 'user_following' }),
@@ -118,6 +145,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
     }),
     likes: many(likes),
     comments: many(comments),
+    notifications: many(notifications),
 }));
 
 export const likesRelations = relations(likes, ({ one }) => ({
@@ -156,16 +184,48 @@ export const followersRelations = relations(followers, ({ one }) => ({
     }),
 }));
 
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+    user: one(users, {
+        fields: [notifications.user_id],
+        references: [users.id],
+        relationName: 'received_notifications',
+    }),
+    author: one(users, {
+        fields: [notifications.author_id],
+        references: [users.id],
+        relationName: 'triggered_notifications',
+    }),
+    post: one(posts, {
+        fields: [notifications.post_id],
+        references: [posts.id],
+    }),
+}));
+
 /**
  * Drizzle Infer Types
  */
+
+// User
 export type User = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;
+
+// Post
 export type Post = InferSelectModel<typeof posts>;
 export type NewPost = InferInsertModel<typeof posts>;
+
+// Like
 export type Like = InferSelectModel<typeof likes>;
 export type NewLike = InferInsertModel<typeof likes>;
+
+// Comment
 export type Comment = InferSelectModel<typeof comments>;
 export type NewComment = InferInsertModel<typeof comments>;
+
+// Follower
 export type Follower = InferSelectModel<typeof followers>;
 export type NewFollower = InferInsertModel<typeof followers>;
+
+// Notification
+export type Notification = InferSelectModel<typeof notifications>;
+export type NewNotification = InferInsertModel<typeof notifications>;
+
