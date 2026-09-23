@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1790089206235,
-      "tag": "0000_shallow_nomad",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1790089405219,
-      "tag": "0001_luxuriant_microchip",
+      "when": 1790143522279,
+      "tag": "0000_fair_reavers",
       "breakpoints": true
     }
   ]
