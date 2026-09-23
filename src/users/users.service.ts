@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
  * Database & Drizzle ORM Imports
  */
 import { eq } from 'drizzle-orm';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
+import { NeonDatabase } from 'drizzle-orm/neon-serverless';
 
 /**
  * Schema
@@ -28,7 +28,7 @@ import { UserResponseDto } from './dtos/user-response.dto.js';
 export class UsersService {
     constructor(
         @Inject('drizzle')
-        private readonly drizzle: NeonHttpDatabase<typeof schema>,
+        private readonly drizzle: NeonDatabase<typeof schema>,
     ) { }
 
     private readonly passwordSaltRounds = 10;

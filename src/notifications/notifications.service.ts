@@ -1,5 +1,5 @@
 import { Injectable, Inject, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
+import { NeonDatabase } from 'drizzle-orm/neon-serverless';
 import { eq } from 'drizzle-orm';
 
 /**
@@ -11,7 +11,7 @@ import * as schema from '../db/schema.js';
 export class NotificationsService {
     constructor(
         @Inject('drizzle')
-        private readonly drizzle: NeonHttpDatabase<typeof schema>,
+        private readonly drizzle: NeonDatabase<typeof schema>,
     ) { }
 
     async getUserNotifications(userId: string) {

@@ -4,10 +4,11 @@
 import { Global, Module } from '@nestjs/common';
 
 /**
- * Neon Database client and Drizzle ORM setup.
+ * Neon Database client with WebSockets and Drizzle ORM setup.
  */
-import { neon } from '@neondatabase/serverless';
-import { drizzle as drizzleOrm } from 'drizzle-orm/neon-http';
+import { neonConfig, Pool } from '@neondatabase/serverless';
+import { drizzle as drizzleOrm } from 'drizzle-orm/neon-serverless';
+import ws from 'ws';
 
 /**
  * Database schema.
@@ -15,24 +16,30 @@ import { drizzle as drizzleOrm } from 'drizzle-orm/neon-http';
 import * as schema from './schema.js';
 
 /**
- * Drizzle ORM provider injection token (it is used to inject the Drizzle ORM instance into other parts of the application).
+ * Drizzle ORM provider injection token.
  */
-export const drizzle = "drizzle";
+export const drizzle = 'drizzle';
 
-@Global() // This makes the DbModule globally available throughout the application
+@Global()
 @Module({
     providers: [
         {
-            provide: 'drizzle',
+            provide: drizzle,
             useFactory: () => {
                 const dbUrl = process.env.NEON_DB_URL;
                 if (!dbUrl) throw new Error('NEON_DB_URL is not defined');
 
-                const sql = neon(dbUrl);
-                return drizzleOrm(sql, { schema });
-            }
+                neonConfig.webSocketConstructor = ws;
+
+                // Setting up the connection pool for the Neon database with WebSocket support
+                const pool = new Pool({
+                    connectionString: dbUrl,
+                });
+
+                return drizzleOrm(pool, { schema });
+            },
         },
     ],
-    exports: ['drizzle'],
+    exports: [drizzle],
 })
 export class DbModule { }

@@ -1,3 +1,4 @@
+import { NeonDatabase } from 'drizzle-orm/neon-serverless';
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 
 /**
@@ -19,7 +20,6 @@ import type { Post } from '../db/schema.js';
  * Database & Drizzle ORM Imports
  */
 import { eq, or, SQL, ilike, asc, desc, and, count } from 'drizzle-orm';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
 
 /**
  * DTOs
@@ -37,7 +37,7 @@ import * as schema from '../db/schema.js';
 export class PostsService {
   constructor(
     @Inject('drizzle')
-    private readonly drizzle: NeonHttpDatabase<typeof schema>,
+    private readonly drizzle: NeonDatabase<typeof schema>,
     private readonly usersService: UsersService,
   ) { }
 

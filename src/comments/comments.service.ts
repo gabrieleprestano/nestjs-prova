@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NeonHttpDatabase } from 'drizzle-orm/neon-http/driver';
+import { NeonDatabase } from 'drizzle-orm/neon-serverless';
 import { NotFoundException } from '@nestjs/common';
 
 /**
@@ -26,7 +26,7 @@ import * as schema from '../db/schema.js';
 export class CommentsService {
     constructor(
         @Inject('drizzle')
-        private readonly drizzle: NeonHttpDatabase<typeof schema>,
+        private readonly drizzle: NeonDatabase<typeof schema>,
         private readonly usersService: UsersService,
     ) { }
 
