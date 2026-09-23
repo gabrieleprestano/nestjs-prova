@@ -29,6 +29,7 @@ import { SignInDto } from '../users/dtos/sign-in.dto.js';
  * Guards
  */
 import { NoAuthGuard } from '../guards/no-auth.guard.js';
+import { AuthGuard } from '../guards/auth.guard.js';
 
 @Controller('auth')
 export class AuthController {
@@ -95,6 +96,7 @@ export class AuthController {
         };
     }
 
+    @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     @Post('sign-out')
     async signOut(
