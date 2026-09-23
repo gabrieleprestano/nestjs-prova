@@ -16,6 +16,7 @@ import { UsersModule } from './users/users.module.js';
 import { PostsModule } from './posts/posts.module.js';
 import { LikesModule } from './likes/likes.module.js';
 import { CommentsModule } from './comments/comments.module.js';
+import { FollowersModule } from './followers/followers.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -34,6 +35,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     PostsModule,
     LikesModule,
     CommentsModule,
+    FollowersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
