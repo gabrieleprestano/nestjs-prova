@@ -8,6 +8,13 @@
       "when": 1790143522279,
       "tag": "0000_fair_reavers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790146866546,
+      "tag": "0001_next_hammerhead",
+      "breakpoints": true
     }
   ]
 }
