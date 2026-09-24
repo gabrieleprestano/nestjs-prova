@@ -98,6 +98,28 @@ export class UsersService {
                             }
                         }
                     }
+                },
+                followers: {
+                    with: {
+                        follower: {
+                            columns: {
+                                id: true,
+                                name: true,
+                                email: true,
+                            }
+                        }
+                    }
+                },
+                following: {
+                    with: {
+                        following: {
+                            columns: {
+                                id: true,
+                                name: true,
+                                email: true,
+                            }
+                        }
+                    }
                 }
             }
         });
