@@ -41,8 +41,8 @@ export class CommentsService {
             const commentAuthor = await this.usersService.findById(userId);
             const targetPostAuthor = await this.usersService.findById(existingPost.author_id);
 
-            const commentAuthorName = commentAuthor?.name ?? 'An unknown user';
-            const targetPostAuthorName = targetPostAuthor?.name ?? 'an unknown author';
+            const commentAuthorName = commentAuthor?.user.name ?? 'An unknown user';
+            const targetPostAuthorName = targetPostAuthor?.user.name ?? 'an unknown author';
 
             const [newComment] = await tx.insert(schema.comments).values({
                 content: createCommentDto.content,

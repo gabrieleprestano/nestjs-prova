@@ -31,8 +31,8 @@ export class FollowersService {
 
             if (!existingFollowingUser) throw new NotFoundException('User was not found');
 
-            const followerUserName = followerUser?.name ?? 'An unknown user';
-            const existingFollowingUserName = existingFollowingUser?.name ?? 'an unknown user';
+            const followerUserName = followerUser?.user.name ?? 'An unknown user';
+            const existingFollowingUserName = existingFollowingUser?.user.name ?? 'an unknown user';
 
             const existingFollow = await tx.query.followers.findFirst({
                 where: and(

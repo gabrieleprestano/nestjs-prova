@@ -69,7 +69,7 @@ export class UsersService {
         return admins.map(this.toUserDto);
     }
 
-    async findById(id: string): Promise<(UserResponseDto | undefined)> {
+    async findById(id: string): Promise<({ user: UserResponseDto; postsCount: number; followersCount: number; followingCount: number } | undefined)> {
         const user = await this.drizzle.query.users.findFirst({
             where: eq(schema.users.id, id),
             with: {
@@ -126,7 +126,16 @@ export class UsersService {
 
         if (!user) return undefined;
 
-        return new UserResponseDto(user);
+        const postsCount = user.posts?.length ?? 0;
+        const followersCount = user.followers?.length ?? 0;
+        const followingCount = user.following?.length ?? 0;
+
+        return {
+            postsCount: postsCount,
+            followersCount: followersCount,
+            followingCount: followingCount,
+            user: new UserResponseDto(user),
+        }
     }
 
     async findByEmail(email: string): Promise<UserResponseDto[]> {

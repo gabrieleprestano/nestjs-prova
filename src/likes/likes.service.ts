@@ -35,8 +35,8 @@ export class LikesService {
             const likeAuthor = await this.usersService.findById(userId);
             const targetPostAuthor = await this.usersService.findById(existingPost.author_id);
 
-            const likeAuthorName = likeAuthor?.name ?? 'An unknown user';
-            const targetPostAuthorName = targetPostAuthor?.name ?? 'an unknown author';
+            const likeAuthorName = likeAuthor?.user.name ?? 'An unknown user';
+            const targetPostAuthorName = targetPostAuthor?.user.name ?? 'an unknown author';
 
             const existingLike = await tx.query.likes.findFirst({
                 where: and(

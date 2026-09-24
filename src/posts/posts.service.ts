@@ -19,7 +19,7 @@ import type { Post } from '../db/schema.js';
 /**
  * Database & Drizzle ORM Imports
  */
-import { eq, or, SQL, ilike, asc, desc, and, count } from 'drizzle-orm';
+import { eq, or, SQL, ilike, asc, desc, and, count, inArray } from 'drizzle-orm';
 
 /**
  * DTOs
@@ -149,6 +149,89 @@ export class PostsService {
     return this.toPostDto(post);
   }
 
+  async userFeed(userId: string, queryFilters: PostsFiltersDto): Promise<{ count: number; page: number; limit: number; totalPages: number; posts: PostResponseDto[] }> {
+    const { search, authorId, order, category, page = 1, limit = 10 } = queryFilters;
+
+    const paginationOffset = (page - 1) * limit;
+
+    const followedUsers = await this.drizzle
+      .select()
+      .from(schema.followers)
+      .where(eq(schema.followers.follower_id, userId));
+
+    const followedUserIds = followedUsers.map((follower) => follower.follower_id);
+
+    // Include the current user's own posts in the feed
+    followedUserIds.push(userId);
+
+    const conditions: SQL[] = [
+      // Filter posts to include only those authored by followed users or the current user
+      inArray(schema.posts.author_id, followedUserIds),
+    ];
+
+    if (search) {
+      const searchCondition = or(
+        ilike(schema.posts.title, `%${search}%`),
+        ilike(schema.posts.content, `%${search}%`),
+      );
+      if (searchCondition) conditions.push(searchCondition);
+    }
+
+    if (authorId) conditions.push(eq(schema.posts.author_id, authorId));
+    if (category) conditions.push(eq(schema.posts.category, category));
+
+    const orderBy = order === 'asc'
+      ? asc(schema.posts.created_at)
+      : desc(schema.posts.created_at);
+
+    const where = and(...conditions);
+
+    const [{ total }] = await this.drizzle
+      .select({ total: count() })
+      .from(schema.posts)
+      .where(where);
+
+    if (total === 0) return { count: 0, page: page, limit: limit, totalPages: 0, posts: [] };
+
+    const posts = await this.drizzle.query.posts.findMany({
+      where: where,
+      orderBy: orderBy,
+      limit: limit,
+      offset: paginationOffset,
+      with: {
+        author: {
+          columns: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        likes: true,
+        comments: {
+          with: {
+            user: {
+              columns: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            }
+          }
+        },
+      }
+    });
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      count: total,
+      page: page,
+      limit: limit,
+      totalPages: totalPages,
+      posts: posts.map(this.toPostDto),
+    };
+  }
+
   async create(createPostDto: CreatePostDto, authorId: string): Promise<{ message: string; post: PostResponseDto }> {
     const postDtoSlug = slugify(createPostDto.title, { lower: true, strict: true });
     const existingPost = await this.drizzle.select().from(schema.posts).where(eq(schema.posts.slug, postDtoSlug));
@@ -168,7 +251,7 @@ export class PostsService {
     const postAuthor = await this.usersService.findById(authorId);
 
     return {
-      message: `Post: "${newPost.title}" created successfully by ${postAuthor?.name ?? 'Unknown'}`,
+      message: `Post: "${newPost.title}" created successfully by ${postAuthor?.user.name ?? 'Unknown'}`,
       post: this.toPostDto(newPost)
     };
   }
